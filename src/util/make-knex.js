@@ -82,6 +82,8 @@ function initContext(knexFn) {
       const knexClone = shallowCloneFunction(knexFn); // We need to include getters in our clone
       if (this.client) {
         knexClone.client = Object.assign({}, this.client); // Clone client to avoid leaking listeners that are set on it
+        knexClone.client._events = {};
+        knexClone.client._eventsCount = 0;
         knexClone.client.config = Object.assign({}, this.client.config); // Clone client config to make sure they can be modified independently
         const parentPrototype = Object.getPrototypeOf(this.client);
         if (parentPrototype) {
